@@ -5,6 +5,7 @@ sudo: false
 php:
   - 7.1
   - 7.2
+  - 7.3
   - nightly
 
 env:
@@ -17,8 +18,9 @@ cache:
 
 before_script:
   - phpenv config-rm xdebug.ini || true
-  - if [ "$MIN_STABILITY" != "" ]; then composer config minimum-stability $MIN_STABILITY; fi
-  - composer require phpunit/phpunit:${PHPUNIT}
+  - if [[ "$MIN_STABILITY" != "" ]]; then composer config minimum-stability $MIN_STABILITY; fi
+  - if [[ $(phpenv version-name) != '7.1' ]]; then composer require phpunit/phpunit:${PHPUNIT}; fi
+  - if [[ $(phpenv version-name) == '7.1' ]]; then composer require phpunit/phpunit; fi
 
 script:
   - ./vendor/bin/phpunit
